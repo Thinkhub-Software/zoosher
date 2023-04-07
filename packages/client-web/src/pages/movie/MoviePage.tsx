@@ -1,0 +1,225 @@
+import { useRouter } from "next/router";
+import { trpc } from "../../system/InitTrpcWrapper";
+import { MainColumn } from "../../components/MainColumn";
+import { Box, Chip, Paper, Rating, Stack, Typography } from "@mui/material";
+import { styleConstraints } from "../../misc/styleConstraints";
+import Image from "next/image";
+import { mockMovieDesc } from "../../misc/mock";
+
+export const MoviePage = () => {
+
+    const router = useRouter();
+    const { movie_id } = router.query;
+
+    const desc = "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a";
+    const descLong = mockMovieDesc;
+    const genres = ['asd', 'basd']
+
+    if ((typeof movie_id !== 'string') && !!movie_id)
+        throw new Error(`Incorrect url param: ${movie_id} typeof ${typeof movie_id}!`);
+
+    const { data } = trpc
+        .movieRouter
+        .getMovieDetails
+        .useQuery({ movieId: movie_id! }, { enabled: !!movie_id });
+
+    return (
+        <>
+            {/* header */}
+            <Paper
+                id="header-root"
+                elevation={0}
+                sx={{
+                    height: "300px",
+                    width: '100vw',
+                    position: "relative",
+                    borderRadius: 0,
+                    display: 'flex'
+                }}>
+
+                <Stack
+                    id="header-root-stack"
+                    overflow="hidden"
+                    position="relative"
+                    flex="1"
+                    justifyContent="center">
+
+                    {/* bg */}
+                    <Image
+                        fill
+                        src="/poster.jpg"
+                        alt="movie-banner"
+                        style={{
+                            objectFit: 'fill',
+                            filter: 'contrast(0.6) blur(30px) brightness(1.3)',
+                            margin: "-5px -10px -10px -5px",
+                        }} />
+
+                    {/* contents */}
+                    <Stack
+                        id="content-stack"
+                        sx={{
+                            width: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            zIndex: 1
+                        }}>
+
+                        <MainColumn>
+
+                            <Stack
+                                flexDirection="row">
+
+                                {/* thumbnail */}
+                                <Image
+                                    width={130}
+                                    height={200}
+                                    src="/poster.jpg"
+                                    alt="movie-banner"
+                                    style={{
+                                        objectFit: 'cover',
+                                        marginRight: styleConstraints.spacing.normal
+                                    }} />
+
+                                {/* info */}
+                                <Stack>
+                                    <Typography
+                                        variant="h5">
+                                        {data?.movieTitle ?? ''}
+                                    </Typography>
+
+                                    <Box
+                                        sx={{
+                                            marginTop: styleConstraints.spacing.normal
+                                        }}>
+                                        {genres
+                                            .map((genreName, index) => (
+                                                <Chip
+                                                    key={index}
+                                                    size="small"
+                                                    color="primary"
+                                                    sx={{
+                                                        marginRight: styleConstraints.spacing.small,
+                                                        marginTop: styleConstraints.spacing.small
+                                                    }}
+                                                    label={genreName} />
+                                            ))}
+                                    </Box>
+
+                                    <Typography
+                                        marginTop={styleConstraints.spacing.small}>
+                                        {desc}
+                                    </Typography>
+
+                                    <Rating
+                                        value={8}
+                                        max={10}
+                                        readOnly />
+                                </Stack>
+                            </Stack>
+                        </MainColumn>
+                    </Stack>
+                </Stack>
+            </Paper>
+
+            <MainColumn>
+
+                {/* content */}
+                <Paper
+                    sx={{
+                        padding: styleConstraints.spacing.large,
+                        alignSelf: 'stretch',
+                    }}>
+
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            marginBottom: styleConstraints.spacing.small
+                        }}>
+                        Description
+                    </Typography>
+
+                    <Typography>
+                        {descLong}
+                    </Typography>
+
+                    <Typography
+                        sx={{
+                            marginTop: styleConstraints.spacing.normal,
+                            marginBottom: styleConstraints.spacing.small
+                        }}
+                        variant="h6">
+                        Links
+                    </Typography>
+
+                    <Typography>
+                        Wikipedia:
+                        <a target="_blank" href={data?.wikiUrl ?? ''}>
+                            {data?.wikiUrl ?? ''}
+                        </a>
+                    </Typography>
+
+                    <Typography>
+                        Imdb:
+                        <a target="_blank" href={data?.imdbUrl ?? ''}>
+                            {data?.imdbUrl ?? ''}
+                        </a>
+                    </Typography>
+
+                    <Typography
+                        sx={{
+                            marginTop: styleConstraints.spacing.normal,
+                            marginBottom: styleConstraints.spacing.small
+                        }}
+                        variant="h6">
+                        Related movies
+                    </Typography>
+
+                    <Stack
+                        flexDirection="row">
+
+                        <Image
+                            width={130}
+                            height={200}
+                            src="/poster.jpg"
+                            alt="movie-banner"
+                            style={{
+                                objectFit: 'cover',
+                                marginRight: styleConstraints.spacing.normal
+                            }} />
+
+                        <Image
+                            width={130}
+                            height={200}
+                            src="/poster.jpg"
+                            alt="movie-banner"
+                            style={{
+                                objectFit: 'cover',
+                                marginRight: styleConstraints.spacing.normal
+                            }} />
+
+                        <Image
+                            width={130}
+                            height={200}
+                            src="/poster.jpg"
+                            alt="movie-banner"
+                            style={{
+                                objectFit: 'cover',
+                                marginRight: styleConstraints.spacing.normal
+                            }} />
+
+                        <Image
+                            width={130}
+                            height={200}
+                            src="/poster.jpg"
+                            alt="movie-banner"
+                            style={{
+                                objectFit: 'cover',
+                                marginRight: styleConstraints.spacing.normal
+                            }} />
+                    </Stack>
+                </Paper>
+            </MainColumn>
+        </>
+    )
+}

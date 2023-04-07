@@ -1,41 +1,64 @@
 import { SimpleMovieDTO } from "../dto/SimpleMovieDTO";
-import { queryMoviesGql } from "../external-api/tmdbw/query/queryMovies";
-import { QueryMoviesQuery, QueryMoviesQueryVariables } from "../external-api/tmdbw/schema";
 import { ConfigService } from "./ConfigService";
 import { OMDBService } from "./OMDBService";
 import { TmdbwService } from "./TmdbwService";
+import { WikipediaService } from "./WikipediaService";
 
 export class MovieService {
 
     constructor(
         private _tmdbwService: TmdbwService,
         private _omdbService: OMDBService,
-        private _configService: ConfigService) {
+        private _configService: ConfigService,
+        private _wikipediaService: WikipediaService) {
     }
 
     async getMoviesAsync(title: string): Promise<SimpleMovieDTO[]> {
 
-        const { searchMovies } = await this
-            ._tmdbwService
-            .getGraphQLClient()
-            .request<QueryMoviesQuery, QueryMoviesQueryVariables>(queryMoviesGql, { term: title });
+        /**
+         * In case of empty search srtring, return the popular movies.
+         * - don't let the user find an ugly blank screen
+         */
+        if (title.length <= 2) {
 
-        const mappedMovies = searchMovies
+            const popMovies = await this
+                ._tmdbwService
+                .getPopularMoviesAsync();
+
+            return popMovies
+                .map(movie => ({
+                    id: movie.id,
+                    name: movie.name,
+                    genres: movie.genres.map(x => x.name),
+                    rating: movie.score
+                } satisfies SimpleMovieDTO));
+        }
+
+        /**
+         * Search for movies
+         */
+        const searchMovies = await this
+            ._tmdbwService
+            .searchMoviesAsync(title);
+
+        return searchMovies
             .map(movie => ({
                 id: movie.id,
                 name: movie.name,
                 genres: movie.genres.map(x => x.name),
                 rating: movie.score
             } satisfies SimpleMovieDTO));
-
-        return mappedMovies;
     }
 
-    async getMovieDetailsAsync(title: string) {
+    async getMovieDetailsAsync(id: string) {
+
+        const movieTitle = await this
+            ._tmdbwService
+            .getMovieTitleAsync(id);
 
         const { imdbID } = await this
             ._omdbService
-            .getFirstMovieByTitleAsync(title);
+            .getFirstMovieByTitleAsync(movieTitle);
 
         const imdbUrl = this
             ._configService
@@ -43,11 +66,15 @@ export class MovieService {
             .replace('{id}', imdbID);
 
         const wikiUrl = this
-            ._configService
-            .wikiMovieUrlTemplate
-            .replace('{movie_title}', title.replaceAll(' ', '_'));
+            ._wikipediaService
+            .getWikipediaMovieUrl(movieTitle);
+
+        const description = this
+            ._wikipediaService
+            .getWikipediaMovieDescriptionAsync(movieTitle);
 
         return {
+            movieTitle,
             imdbUrl,
             wikiUrl
         }

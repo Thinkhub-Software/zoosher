@@ -2,9 +2,9 @@ import { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
     schema: "./tmbw-api-graphql/tmdbw-api-schema.graphql",
-    documents: ['./src/tmdbw-api/**/*.ts'],
+    documents: ['./src/external-api/tmdbw/**/*.ts'],
     generates: {
-        './src/tmdbw-api/schema.ts': {
+        './src/external-api/tmdbw/schema.ts': {
             plugins: [
                 "typescript",
                 "typescript-operations"

@@ -1153,6 +1153,13 @@ export type VoteAverageInput = {
   min?: InputMaybe<Scalars['ScoreMinimumRange']>;
 };
 
+export type GetMovieQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetMovieQuery = { __typename?: 'Query', movie: { __typename?: 'Movie', name: string } };
+
 export type QueryMoviesQueryVariables = Exact<{
   term: Scalars['String'];
 }>;
@@ -1163,4 +1170,4 @@ export type QueryMoviesQuery = { __typename?: 'Query', searchMovies: Array<{ __t
 export type FetchPopularQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchPopularQuery = { __typename?: 'Query', movies: Array<{ __typename?: 'Movie', id: string, name: string, overview: string, releaseDate?: any | null, img?: { __typename?: 'Poster', url?: any | null } | null, reviews: Array<{ __typename?: 'Review', id: string, author: string, content: string, language?: { __typename?: 'Language', code: string, name: string } | null }> }> };
+export type FetchPopularQuery = { __typename?: 'Query', movies: Array<{ __typename?: 'Movie', id: string, name: string, overview: string, releaseDate?: any | null, score: number, genres: Array<{ __typename?: 'Genre', name: string }>, img?: { __typename?: 'Poster', url?: any | null } | null, reviews: Array<{ __typename?: 'Review', id: string, author: string, content: string, language?: { __typename?: 'Language', code: string, name: string } | null }> }> };

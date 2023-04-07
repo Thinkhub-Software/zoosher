@@ -7,6 +7,10 @@ query fetchPopular {
     name
     overview
     releaseDate
+    genres {
+      name
+    }
+    score
     img: poster {
       url: custom(size: "w185_and_h278_bestv2")
     }

@@ -1,6 +1,7 @@
 export const styleConstraints = {
     spacing: {
-        normal: '5px',
+        small: '5px',
+        normal: '15px',
         large: '20px'
     }
 }

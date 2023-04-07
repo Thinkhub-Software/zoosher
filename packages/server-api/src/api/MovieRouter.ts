@@ -13,5 +13,18 @@ export const movieRouter = trpcRouter({
                 .services
                 .movieService
                 .getMoviesAsync(input.title);
+        }),
+
+    getMovieDetails: trpcProcedure
+        .input(z
+            .object({
+                movieId: z.string()
+            }))
+        .query(async ({ ctx, input }) => {
+
+            return await ctx
+                .services
+                .movieService
+                .getMovieDetailsAsync(input.movieId);
         })
 });
