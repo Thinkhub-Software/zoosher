@@ -146,10 +146,11 @@ export default function Home() {
             }}
             InputProps={{
               endAdornment: (
-                <InputAdornment >
+                <InputAdornment
+                  position="end">
                   <Icons.Search />
                 </InputAdornment>
-              ),
+              )
             }}
             size="small" />
         </MainColumn>
