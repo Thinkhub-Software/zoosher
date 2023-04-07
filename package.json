@@ -1,0 +1,16 @@
+{
+  "name": "@zoosher/monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "mon:server-api": "lerna run mon --scope=@zoosher/server-api",
+    "start:client-web": "lerna run start --scope=@zoosher/client-web"
+  },
+  "devDependencies": {
+    "lerna": "6.0.3",
+    "typescript": "4.9.3"
+  }
+}
