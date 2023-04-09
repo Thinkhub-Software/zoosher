@@ -9,7 +9,8 @@
     "scripts": {
         "build": "tsc",
         "mon": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
-        "codegen": "graphql-codegen-esm --config codegen.ts"
+        "codegen": "graphql-codegen-esm --config codegen.ts",
+        "prodrun": "node --experimental-specifier-resolution=node dist/server.js"
     },
     "dependencies": {
         "@apollo/client": "^3.7.11",

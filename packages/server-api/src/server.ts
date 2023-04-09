@@ -6,6 +6,8 @@ import { mainRouter } from "./api/MainRouter";
 import { createTrpcContext } from "./api/trpc";
 import { instantiateSingletonServices, instantiateTransientServices } from "./instantiation";
 
+console.log('Starting server...');
+
 initJsExtensions();
 
 (async () => {
@@ -48,5 +50,5 @@ initJsExtensions();
             }));
 
     expressInstance
-        .listen(singletonServices.configService.trpcPort);
+        .listen(singletonServices.configService.trpcPort, () => console.log(`Server started on port ${singletonServices.configService.trpcPort}.`));
 })();
