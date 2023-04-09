@@ -5,8 +5,8 @@ on:
 
 env:
   BRANCH_NAME: ${{ github.ref_name }}
-  CLIENT_WEB_IMAGE_NAME: gcr.io/{{secrets.GCP_PROJECT_ID}}/client-web-${{github.ref_name}}-image
-  SERVER_API_IMAGE_NAME: gcr.io/{{secrets.GCP_PROJECT_ID}}/server-api-${{github.ref_name}}-image
+  CLIENT_WEB_IMAGE_NAME: gcr.io/${{secrets.GCP_PROJECT_ID}}/client-web-${{github.ref_name}}-image
+  SERVER_API_IMAGE_NAME: gcr.io/${{secrets.GCP_PROJECT_ID}}/server-api-${{github.ref_name}}-image
   
   GCP_PROJECT_ID: ${{secrets.GCP_PROJECT_ID}}
   GCP_SERVICE_ACCOUNT_EMAIL: ${{secrets.GCP_SERVICE_ACCOUNT_EMAIL}}
