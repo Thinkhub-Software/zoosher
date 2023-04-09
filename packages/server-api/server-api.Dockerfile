@@ -4,7 +4,6 @@
 FROM node:18.12.1-slim as server-api-builder
 WORKDIR /app
 
-COPY /node_modules ./node_modules
 COPY /packages ./packages
 COPY /lerna.json .
 COPY /package.json .
