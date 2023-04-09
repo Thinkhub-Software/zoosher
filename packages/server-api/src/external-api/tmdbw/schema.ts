@@ -1158,7 +1158,7 @@ export type GetMovieQueryVariables = Exact<{
 }>;
 
 
-export type GetMovieQuery = { __typename?: 'Query', movie: { __typename?: 'Movie', name: string, score: number, genres: Array<{ __typename?: 'Genre', name: string }> } };
+export type GetMovieQuery = { __typename?: 'Query', movie: { __typename?: 'Movie', name: string, score: number, genres: Array<{ __typename?: 'Genre', name: string }>, recommended: Array<{ __typename?: 'Movie', id: string, name: string, img?: { __typename?: 'Poster', url?: any | null } | null }> } };
 
 export type QueryMoviesQueryVariables = Exact<{
   term: Scalars['String'];

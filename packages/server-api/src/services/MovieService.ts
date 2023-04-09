@@ -56,7 +56,7 @@ export class MovieService {
 
     async getMovieDetailsAsync(id: string) {
 
-        const { genres, rating, title } = await this
+        const { genres, rating, title, relatedMovies } = await this
             ._tmdbwService
             .getMovieDetailsAsync(id);
 
@@ -73,11 +73,13 @@ export class MovieService {
             ._wikipediaService
             .getWikipediaMovieUrl(title);
 
-        const { description } = await this
+        const description = await this
             ._wikipediaService
             .getWikipediaMovieDescriptionAsync(title);
 
-        const shortDescription = `${description.substring(0, 250)}[...]`;
+        const shortDescription = description
+            ? `${description.substring(0, 250)}[...]`
+            : null;
 
         return {
             movieTitle: title,
@@ -87,7 +89,8 @@ export class MovieService {
             description,
             shortDescription,
             genres,
-            posterUrl: Poster
+            posterUrl: Poster,
+            relatedMovies
         }
     }
 }

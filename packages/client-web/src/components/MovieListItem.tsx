@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useIsMobile } from '../misc/hooks';
 import { styleConstraints } from '../misc/styleConstraints';
+import { routes } from '../misc/routes';
 
 export const MovieListItem = ({
     movie: {
@@ -19,7 +20,7 @@ export const MovieListItem = ({
     const { isMobile } = useIsMobile();
 
     return (
-        <Link href={`/movie/${id}`}>
+        <Link href={routes.movie.replace('{movie_id}', id)}>
             <Paper
                 sx={{
                     margin: '0 0 10px 0',

@@ -6,6 +6,9 @@ import { MainColumn } from "../../components/MainColumn";
 import { useTextLoadingEffect } from "../../misc/hooks";
 import { styleConstraints } from "../../misc/styleConstraints";
 import { trpcStaticClient } from "../../system/trpcStatic";
+import Link from "next/link";
+import { routes } from "../../misc/routes";
+import { useMemo } from "react";
 
 export async function getServerSideProps(context: GetServerSidePropsContext<{ movie_id: string }>) {
 
@@ -36,33 +39,23 @@ export default function MoviePage({ movieDetails }: InferGetStaticPropsType<type
 
     const isLoaded = true;
 
-    const { description, genres, imdbUrl, movieTitle, posterUrl, rating, shortDescription, wikiUrl } = movieDetails;
+    const {
+        genres,
+        imdbUrl,
+        movieTitle,
+        posterUrl,
+        rating,
+        wikiUrl,
+        relatedMovies
+    } = movieDetails;
 
-    // CLIENT SIDE DATA FETCHING
-    // const { data } = TrpcReactQueryContext
-    //     .movieRouter
-    //     .getMovieDetails
-    //     .useQuery({ movieId: movie_id! }, { enabled: !!movie_id });
-
-    // const {
-    //     description,
-    //     imdbUrl,
-    //     movieTitle,
-    //     wikiUrl,
-    //     genres,
-    //     shortDescription,
-    //     posterUrl,
-    //     rating
-    // } = useMemo(() => ({
-    //     description: data?.description ?? '',
-    //     shortDescription: data?.shortDescription ?? '',
-    //     genres: data?.genres ?? [],
-    //     imdbUrl: data?.imdbUrl ?? '',
-    //     movieTitle: data?.movieTitle ?? '',
-    //     wikiUrl: data?.wikiUrl ?? '',
-    //     posterUrl: data?.posterUrl ?? '',
-    //     rating: data?.rating ?? 0
-    // } satisfies (typeof data)), [data]);
+    const {
+        description,
+        shortDescription
+    } = useMemo(() => ({
+        description: movieDetails.description ?? '',
+        shortDescription: movieDetails.shortDescription ?? ''
+    }), [movieDetails]);
 
     return (
         <>
@@ -244,47 +237,29 @@ export default function MoviePage({ movieDetails }: InferGetStaticPropsType<type
                     </Typography>
 
                     <Stack
+                        sx={{
+                            overflowX: 'scroll'
+                        }}
                         flexDirection="row">
 
-                        <Image
-                            width={130}
-                            height={200}
-                            src="/poster.jpg"
-                            alt="movie-banner"
-                            style={{
-                                objectFit: 'cover',
-                                marginRight: styleConstraints.spacing.normal
-                            }} />
+                        {relatedMovies
+                            .map((relatedMovie, index) => (
 
-                        <Image
-                            width={130}
-                            height={200}
-                            src="/poster.jpg"
-                            alt="movie-banner"
-                            style={{
-                                objectFit: 'cover',
-                                marginRight: styleConstraints.spacing.normal
-                            }} />
-
-                        <Image
-                            width={130}
-                            height={200}
-                            src="/poster.jpg"
-                            alt="movie-banner"
-                            style={{
-                                objectFit: 'cover',
-                                marginRight: styleConstraints.spacing.normal
-                            }} />
-
-                        <Image
-                            width={130}
-                            height={200}
-                            src="/poster.jpg"
-                            alt="movie-banner"
-                            style={{
-                                objectFit: 'cover',
-                                marginRight: styleConstraints.spacing.normal
-                            }} />
+                                <Link
+                                    key={index}
+                                    href={routes.movie.replace('{movie_id}', relatedMovie.id)}>
+                                    <Image
+                                        title={relatedMovie.title}
+                                        width={130}
+                                        height={200}
+                                        src={relatedMovie.posterUrl ?? "/poster.jpg"}
+                                        alt="movie-banner"
+                                        style={{
+                                            objectFit: 'cover',
+                                            marginRight: styleConstraints.spacing.normal
+                                        }} />
+                                </Link>
+                            ))}
                     </Stack>
                 </Paper>
             </MainColumn>

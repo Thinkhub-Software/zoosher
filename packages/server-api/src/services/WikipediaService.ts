@@ -20,7 +20,7 @@ export class WikipediaService {
             .replace('{movie_title}', this.getWikiMovieArticleTitle(movieTitle));
     }
 
-    async getWikipediaMovieDescriptionAsync(movieTitle: string) {
+    async getWikipediaMovieDescriptionAsync(movieTitle: string): Promise<string | null> {
 
         const articleTitle = this
             .getWikiMovieArticleTitle(movieTitle);
@@ -38,8 +38,6 @@ export class WikipediaService {
             .single()
             .extract;
 
-        return {
-            description: explaintext
-        };
+        return explaintext;
     }
 }

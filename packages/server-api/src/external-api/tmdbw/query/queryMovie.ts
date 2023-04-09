@@ -4,10 +4,17 @@ import { gql } from "graphql-request";
   query getMovie($id: ID!) {
     movie(id: $id) {
       name
+      score
       genres {
         name
       }
-      score
+      recommended {
+        id
+        name
+        img: poster {
+          url: custom(size: "w185_and_h278_bestv2")
+        }
+      }
     }
   }
   `

@@ -35,14 +35,20 @@ export class TmdbwService {
 
     async getMovieDetailsAsync(id: string) {
 
-        const { movie: { name, genres, score } } = await this
+        const { movie: { name, genres, score, recommended } } = await this
             ._graphQlClient
             .request<GetMovieQuery, GetMovieQueryVariables>(queryMovieGql, { id });
 
         return {
             genres: genres.map(x => x.name),
             rating: score,
-            title: name
+            title: name,
+            relatedMovies: recommended
+                .map(x => ({
+                    id: x.id,
+                    title: x.name,
+                    posterUrl: (x.img?.url ?? null) as string | null
+                }))
         };
     }
 }
