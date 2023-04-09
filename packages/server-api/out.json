@@ -1,0 +1,22 @@
+{
+	"pageid": 1446437,
+	"ns": 0,
+	"title": "Fight Club",
+	"revisions": [
+		{
+			"revid": 14669907,
+			"parentid": 0,
+			"timestamp": "2010-10-17T11:55:45Z",
+			"slots": {
+				"main": {
+					"contentmodel": "wikitext",
+					"contentformat": "text/x-wiki",
+					"*": "#REDIRECT [[鬥陣俱樂部]]"
+				}
+			}
+		}
+	],
+	"convert_from": "Fight_Club",
+	"original_title": "Fight_Club",
+	"is_Flow": false
+}

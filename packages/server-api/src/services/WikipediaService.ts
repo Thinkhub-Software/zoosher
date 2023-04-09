@@ -1,4 +1,5 @@
 import axios from "axios";
+import { QueryResult } from "../external-api/wikipedia/WikiTypes";
 import { ConfigService } from "./ConfigService";
 
 export class WikipediaService {
@@ -24,9 +25,21 @@ export class WikipediaService {
         const articleTitle = this
             .getWikiMovieArticleTitle(movieTitle);
 
-        const wikiArticle = await axios
-            .get(this._configService.wikiQueryUrl.replace('{wiki_page_title}', articleTitle));
+        const queryUrl = this
+            ._configService
+            .wikiExplaintextQueryUrl
+            .replace('{wiki_page_title}', articleTitle);
 
-        return '';
+        const queryResult = await axios
+            .get<QueryResult>(queryUrl);
+
+        const explaintext = Object
+            .values(queryResult.data.query.pages)
+            .single()
+            .extract;
+
+        return {
+            description: explaintext
+        };
     }
 }

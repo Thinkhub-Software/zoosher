@@ -56,7 +56,7 @@ export class MovieService {
             ._tmdbwService
             .getMovieTitleAsync(id);
 
-        const { imdbID } = await this
+        const { imdbID, Poster } = await this
             ._omdbService
             .getFirstMovieByTitleAsync(movieTitle);
 
@@ -69,14 +69,22 @@ export class MovieService {
             ._wikipediaService
             .getWikipediaMovieUrl(movieTitle);
 
-        const description = this
+        const { description } = await this
             ._wikipediaService
             .getWikipediaMovieDescriptionAsync(movieTitle);
+
+        const genres = ['genre1', 'genre2'];
+
+        const shortDescription = `${description.substring(0, 250)}[...]`;
 
         return {
             movieTitle,
             imdbUrl,
-            wikiUrl
+            wikiUrl,
+            description,
+            shortDescription,
+            genres,
+            posterUrl: Poster
         }
     }
 }

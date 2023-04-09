@@ -26,6 +26,7 @@ export const instantiateTransientServices = ({ configService }: SingletonService
         configService,
         tmdbwService,
         odbmService,
-        movieService
+        movieService,
+        wikipediaService
     }
 }

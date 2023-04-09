@@ -1,19 +1,23 @@
-import { useRouter } from "next/router";
-import { trpc } from "../../system/InitTrpcWrapper";
-import { MainColumn } from "../../components/MainColumn";
 import { Box, Chip, Paper, Rating, Stack, Typography } from "@mui/material";
-import { styleConstraints } from "../../misc/styleConstraints";
 import Image from "next/image";
-import { mockMovieDesc } from "../../misc/mock";
+import { useRouter } from "next/router";
+import { useMemo } from "react";
+import { MainColumn } from "../../components/MainColumn";
+import { styleConstraints } from "../../misc/styleConstraints";
+import { trpc } from "../../system/InitTrpcWrapper";
+
+const useTextLoadingEffect = (isLoaded: boolean, height: string | number) => {
+
+    return {
+        height: isLoaded ? undefined : height,
+        // background: isLoaded ? undefined : '#ededed'
+    }
+}
 
 export const MoviePage = () => {
 
     const router = useRouter();
     const { movie_id } = router.query;
-
-    const desc = "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a";
-    const descLong = mockMovieDesc;
-    const genres = ['asd', 'basd']
 
     if ((typeof movie_id !== 'string') && !!movie_id)
         throw new Error(`Incorrect url param: ${movie_id} typeof ${typeof movie_id}!`);
@@ -22,6 +26,24 @@ export const MoviePage = () => {
         .movieRouter
         .getMovieDetails
         .useQuery({ movieId: movie_id! }, { enabled: !!movie_id });
+
+    const {
+        description,
+        imdbUrl,
+        movieTitle,
+        wikiUrl,
+        genres,
+        shortDescription,
+        posterUrl
+    } = useMemo(() => ({
+        description: data?.description ?? '',
+        shortDescription: data?.shortDescription ?? '',
+        genres: data?.genres ?? [],
+        imdbUrl: data?.imdbUrl ?? '',
+        movieTitle: data?.movieTitle ?? '',
+        wikiUrl: data?.wikiUrl ?? '',
+        posterUrl: data?.posterUrl ?? ''
+    } satisfies (typeof data)), [data])
 
     return (
         <>
@@ -44,14 +66,24 @@ export const MoviePage = () => {
                     flex="1"
                     justifyContent="center">
 
-                    {/* bg */}
+                    {/* black backdrop */}
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            background: 'black',
+                            width: '100%',
+                            height: '100%',
+                            top: 0
+                        }} />
+
+                    {/* bg image */}
                     <Image
                         fill
-                        src="/poster.jpg"
+                        src={posterUrl}
                         alt="movie-banner"
                         style={{
                             objectFit: 'fill',
-                            filter: 'contrast(0.6) blur(30px) brightness(1.3)',
+                            filter: 'contrast(0.6) blur(30px) brightness(0.8)',
                             margin: "-5px -10px -10px -5px",
                         }} />
 
@@ -74,7 +106,7 @@ export const MoviePage = () => {
                                 <Image
                                     width={130}
                                     height={200}
-                                    src="/poster.jpg"
+                                    src={posterUrl}
                                     alt="movie-banner"
                                     style={{
                                         objectFit: 'cover',
@@ -84,13 +116,16 @@ export const MoviePage = () => {
                                 {/* info */}
                                 <Stack>
                                     <Typography
-                                        variant="h5">
-                                        {data?.movieTitle ?? ''}
+                                        variant="h5"
+                                        color="white"
+                                        sx={useTextLoadingEffect(!!data, '40px')}>
+                                        {movieTitle}
                                     </Typography>
 
                                     <Box
                                         sx={{
-                                            marginTop: styleConstraints.spacing.normal
+                                            marginTop: styleConstraints.spacing.normal,
+                                            ...useTextLoadingEffect(!!data, '40px')
                                         }}>
                                         {genres
                                             .map((genreName, index) => (
@@ -107,8 +142,10 @@ export const MoviePage = () => {
                                     </Box>
 
                                     <Typography
-                                        marginTop={styleConstraints.spacing.small}>
-                                        {desc}
+                                        marginTop={styleConstraints.spacing.small}
+                                        color="white"
+                                        sx={useTextLoadingEffect(!!data, '60px')}>
+                                        {shortDescription}
                                     </Typography>
 
                                     <Rating
@@ -139,8 +176,9 @@ export const MoviePage = () => {
                         Description
                     </Typography>
 
-                    <Typography>
-                        {descLong}
+                    <Typography
+                        sx={useTextLoadingEffect(!!data, '200px')}>
+                        {description}
                     </Typography>
 
                     <Typography
@@ -154,15 +192,15 @@ export const MoviePage = () => {
 
                     <Typography>
                         Wikipedia:
-                        <a target="_blank" href={data?.wikiUrl ?? ''}>
-                            {data?.wikiUrl ?? ''}
+                        <a target="_blank" href={wikiUrl}>
+                            {wikiUrl}
                         </a>
                     </Typography>
 
                     <Typography>
                         Imdb:
-                        <a target="_blank" href={data?.imdbUrl ?? ''}>
-                            {data?.imdbUrl ?? ''}
+                        <a target="_blank" href={imdbUrl}>
+                            {imdbUrl}
                         </a>
                     </Typography>
 

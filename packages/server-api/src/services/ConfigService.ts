@@ -6,7 +6,7 @@ export class ConfigService {
     public wikiMovieUrlTemplate: string;
     public trpcPort: number;
     public clientWebUrl: string;
-    public wikiQueryUrl: string;
+    public wikiExplaintextQueryUrl: string;
 
     constructor() {
 
@@ -16,6 +16,6 @@ export class ConfigService {
         this.wikiMovieUrlTemplate = 'https://en.wikipedia.org/wiki/{movie_title}';
         this.trpcPort = 5000;
         this.clientWebUrl = "http://localhost:3000";
-        this.wikiQueryUrl = "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=revisions&titles={wiki_page_title}&formatversion=2&rvprop=content&rvslots=*";
+        this.wikiExplaintextQueryUrl = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={wiki_page_title}";
     }
 }

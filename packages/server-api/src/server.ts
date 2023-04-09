@@ -12,6 +12,8 @@ initJsExtensions();
 
     const singletonServices = instantiateSingletonServices();
 
+    await instantiateTransientServices(singletonServices).wikipediaService.getWikipediaMovieDescriptionAsync('Fight Club');
+
     // console.log(await instantiateTransientServices(singletonServices).movieService.getMoviesAsync('Fight Club'));
 
     const expressInstance = express();
