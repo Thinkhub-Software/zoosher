@@ -4,6 +4,10 @@ import { gql } from "graphql-request";
   query getMovie($id: ID!) {
     movie(id: $id) {
       name
+      genres {
+        name
+      }
+      score
     }
   }
   `

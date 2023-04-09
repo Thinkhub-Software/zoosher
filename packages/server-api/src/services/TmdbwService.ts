@@ -33,12 +33,16 @@ export class TmdbwService {
         return searchMovies;
     }
 
-    async getMovieTitleAsync(id: string) {
+    async getMovieDetailsAsync(id: string) {
 
-        const { movie: { name } } = await this
+        const { movie: { name, genres, score } } = await this
             ._graphQlClient
             .request<GetMovieQuery, GetMovieQueryVariables>(queryMovieGql, { id });
 
-        return name;
+        return {
+            genres: genres.map(x => x.name),
+            rating: score,
+            title: name
+        };
     }
 }

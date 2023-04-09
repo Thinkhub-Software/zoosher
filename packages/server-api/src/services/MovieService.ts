@@ -52,13 +52,13 @@ export class MovieService {
 
     async getMovieDetailsAsync(id: string) {
 
-        const movieTitle = await this
+        const { genres, rating, title } = await this
             ._tmdbwService
-            .getMovieTitleAsync(id);
+            .getMovieDetailsAsync(id);
 
         const { imdbID, Poster } = await this
             ._omdbService
-            .getFirstMovieByTitleAsync(movieTitle);
+            .getFirstMovieByTitleAsync(title);
 
         const imdbUrl = this
             ._configService
@@ -67,18 +67,17 @@ export class MovieService {
 
         const wikiUrl = this
             ._wikipediaService
-            .getWikipediaMovieUrl(movieTitle);
+            .getWikipediaMovieUrl(title);
 
         const { description } = await this
             ._wikipediaService
-            .getWikipediaMovieDescriptionAsync(movieTitle);
-
-        const genres = ['genre1', 'genre2'];
+            .getWikipediaMovieDescriptionAsync(title);
 
         const shortDescription = `${description.substring(0, 250)}[...]`;
 
         return {
-            movieTitle,
+            movieTitle: title,
+            rating,
             imdbUrl,
             wikiUrl,
             description,
