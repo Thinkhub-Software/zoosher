@@ -30,7 +30,9 @@ export class MovieService {
                     id: movie.id,
                     name: movie.name,
                     genres: movie.genres.map(x => x.name),
-                    rating: movie.score
+                    rating: movie.score,
+                    posterUrl: movie.img?.url ?? null,
+                    overview: movie.overview
                 } satisfies SimpleMovieDTO));
         }
 
@@ -46,7 +48,9 @@ export class MovieService {
                 id: movie.id,
                 name: movie.name,
                 genres: movie.genres.map(x => x.name),
-                rating: movie.score
+                rating: movie.score,
+                posterUrl: movie.img?.url ?? null,
+                overview: movie.overview
             } satisfies SimpleMovieDTO));
     }
 

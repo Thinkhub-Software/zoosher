@@ -3,4 +3,6 @@ export type SimpleMovieDTO = {
     name: string;
     rating: number;
     genres: string[];
+    posterUrl: string | null;
+    overview: string;
 }

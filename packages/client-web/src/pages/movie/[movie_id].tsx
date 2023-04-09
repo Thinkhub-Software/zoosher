@@ -1,3 +1,3 @@
-import { MoviePage } from "./MoviePage";
+import MoviePage from "./MoviePage";
 
 export default MoviePage;

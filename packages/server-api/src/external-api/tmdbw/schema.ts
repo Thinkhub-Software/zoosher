@@ -1165,7 +1165,7 @@ export type QueryMoviesQueryVariables = Exact<{
 }>;
 
 
-export type QueryMoviesQuery = { __typename?: 'Query', searchMovies: Array<{ __typename?: 'Movie', id: string, name: string, overview: string, releaseDate?: any | null, score: number, genres: Array<{ __typename?: 'Genre', name: string }>, cast: Array<{ __typename?: 'Credit', id: string, person?: { __typename?: 'Person', name: string } | null, role: { __typename?: 'Cast', character: string } | { __typename?: 'Crew' } }> }> };
+export type QueryMoviesQuery = { __typename?: 'Query', searchMovies: Array<{ __typename?: 'Movie', id: string, name: string, overview: string, releaseDate?: any | null, score: number, genres: Array<{ __typename?: 'Genre', name: string }>, img?: { __typename?: 'Poster', url?: any | null } | null, cast: Array<{ __typename?: 'Credit', id: string, person?: { __typename?: 'Person', name: string } | null, role: { __typename?: 'Cast', character: string } | { __typename?: 'Crew' } }> }> };
 
 export type FetchPopularQueryVariables = Exact<{ [key: string]: never; }>;
 

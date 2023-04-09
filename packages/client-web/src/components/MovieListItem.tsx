@@ -10,11 +10,12 @@ export const MovieListItem = ({
         genres,
         name,
         rating,
-        id
+        id,
+        posterUrl,
+        overview
     }
 }: { movie: SimpleMovieDTO }) => {
 
-    const desc = "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a";
     const { isMobile } = useIsMobile();
 
     return (
@@ -30,7 +31,9 @@ export const MovieListItem = ({
                     flexDirection: 'column',
                 }}>
 
-                <Stack direction="row">
+                <Stack
+                    direction="row"
+                    alignItems="flex-start">
 
                     {/* thumbnail */}
                     <Box
@@ -43,9 +46,9 @@ export const MovieListItem = ({
 
                         <Image
                             alt="movie-thumbnail"
-                            src="/bee.avif"
+                            src={posterUrl ?? '/bee.avif'}
                             width={100}
-                            height={100}
+                            height={150}
                             style={{ objectFit: 'cover' }} />
                     </Box>
 
@@ -76,7 +79,7 @@ export const MovieListItem = ({
                             sx={{
                                 display: isMobile ? 'none' : undefined
                             }}>
-                            {desc}
+                            {overview}
                         </Typography>
                     </Box>
                 </Stack>
@@ -87,7 +90,7 @@ export const MovieListItem = ({
                     sx={{
                         display: isMobile ? undefined : 'none'
                     }}>
-                    {desc}
+                    {overview}
                 </Typography>
             </Paper>
         </Link>

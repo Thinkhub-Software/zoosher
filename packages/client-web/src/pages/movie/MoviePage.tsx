@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { MainColumn } from "../../components/MainColumn";
 import { styleConstraints } from "../../misc/styleConstraints";
-import { trpc } from "../../system/InitTrpcWrapper";
+import { TrpcReactQueryContext } from "../../system/InitTrpcWrapper";
 
 const useTextLoadingEffect = (isLoaded: boolean, height: string | number) => {
 
@@ -14,7 +14,7 @@ const useTextLoadingEffect = (isLoaded: boolean, height: string | number) => {
     }
 }
 
-export const MoviePage = () => {
+export default function MoviePage() {
 
     const router = useRouter();
     const { movie_id } = router.query;
@@ -22,7 +22,7 @@ export const MoviePage = () => {
     if ((typeof movie_id !== 'string') && !!movie_id)
         throw new Error(`Incorrect url param: ${movie_id} typeof ${typeof movie_id}!`);
 
-    const { data } = trpc
+    const { data } = TrpcReactQueryContext
         .movieRouter
         .getMovieDetails
         .useQuery({ movieId: movie_id! }, { enabled: !!movie_id });
@@ -34,7 +34,8 @@ export const MoviePage = () => {
         wikiUrl,
         genres,
         shortDescription,
-        posterUrl
+        posterUrl,
+        rating
     } = useMemo(() => ({
         description: data?.description ?? '',
         shortDescription: data?.shortDescription ?? '',
@@ -42,8 +43,9 @@ export const MoviePage = () => {
         imdbUrl: data?.imdbUrl ?? '',
         movieTitle: data?.movieTitle ?? '',
         wikiUrl: data?.wikiUrl ?? '',
-        posterUrl: data?.posterUrl ?? ''
-    } satisfies (typeof data)), [data])
+        posterUrl: data?.posterUrl ?? '',
+        rating: data?.rating ?? 0
+    } satisfies (typeof data)), [data]);
 
     return (
         <>
@@ -83,6 +85,7 @@ export const MoviePage = () => {
                         alt="movie-banner"
                         style={{
                             objectFit: 'fill',
+                            display: posterUrl === '' ? 'none' : undefined,
                             filter: 'contrast(0.6) blur(30px) brightness(0.8)',
                             margin: "-5px -10px -10px -5px",
                         }} />
@@ -103,15 +106,25 @@ export const MoviePage = () => {
                                 flexDirection="row">
 
                                 {/* thumbnail */}
-                                <Image
-                                    width={130}
-                                    height={200}
-                                    src={posterUrl}
-                                    alt="movie-banner"
-                                    style={{
-                                        objectFit: 'cover',
-                                        marginRight: styleConstraints.spacing.normal
-                                    }} />
+                                <Box
+                                    sx={{
+                                        position: 'relative',
+                                        width: '130px',
+                                        height: '200px',
+                                        flexShrink: '0',
+                                        marginRight: styleConstraints.spacing.normal,
+                                        background: 'gray'
+                                    }}>
+
+                                    <Image
+                                        fill
+                                        src={posterUrl}
+                                        alt="movie-banner"
+                                        style={{
+                                            display: posterUrl === '' ? 'none' : undefined,
+                                            objectFit: 'cover',
+                                        }} />
+                                </Box>
 
                                 {/* info */}
                                 <Stack>
@@ -149,7 +162,7 @@ export const MoviePage = () => {
                                     </Typography>
 
                                     <Rating
-                                        value={8}
+                                        value={rating}
                                         max={10}
                                         readOnly />
                                 </Stack>

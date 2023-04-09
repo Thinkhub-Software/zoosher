@@ -1,12 +1,28 @@
 import { CircularProgress, InputAdornment, List, Paper, Stack, TextField } from '@mui/material';
+import { InferGetStaticPropsType } from 'next';
 import { useMemo, useState } from 'react';
 import { MainColumn } from '../../components/MainColumn';
 import { MovieListItem } from '../../components/MovieListItem';
 import { Icons } from '../../misc/icons';
 import { styleConstraints } from '../../misc/styleConstraints';
-import { trpc } from '../../system/InitTrpcWrapper';
+import { TrpcReactQueryContext } from '../../system/InitTrpcWrapper';
+import { trpcStaticClient } from '../../system/trpcStatic';
 
-export default function Home() {
+export async function getStaticProps() {
+
+  const movies = await trpcStaticClient
+    .movieRouter
+    .getMovies
+    .query({ title: '' });
+
+  return {
+    props: {
+      defaultMovies: movies
+    }
+  }
+}
+
+export default function Home({ defaultMovies }: InferGetStaticPropsType<typeof getStaticProps>) {
 
   const [searchTitle, setSearchTitle] = useState('');
 
@@ -18,12 +34,17 @@ export default function Home() {
     return searchTitle;
   }, [searchTitle]);
 
-  const { data, isLoading } = trpc
+
+  const isQueryEnabled = searchTitle !== '';
+
+  const { data, isLoading: isQueryLoading } = TrpcReactQueryContext
     .movieRouter
     .getMovies
-    .useQuery({ title: searchRequestParam });
+    .useQuery({ title: searchRequestParam }, { enabled: isQueryEnabled });
 
-  const moviesList = useMemo(() => data ?? [], [data]);
+  const isLoading = isQueryLoading && isQueryEnabled;
+
+  const moviesList = useMemo(() => data ?? defaultMovies, [data, defaultMovies]);
 
   return (
     <>

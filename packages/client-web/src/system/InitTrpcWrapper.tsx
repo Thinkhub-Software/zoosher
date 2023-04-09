@@ -5,24 +5,27 @@ import { MainRouter } from "@zoosher/server-api";
 import { PropsWithChildren, useState } from "react";
 import { clientConfig } from './clientConfig';
 
-export const trpc = createTRPCReact<MainRouter>();
+export const TrpcReactQueryContext = createTRPCReact<MainRouter>();
 
 export const InitTrpcWrapper = ({ children }: PropsWithChildren) => {
 
+    /**
+     * TRPC - react query
+     */
     const [queryClient] = useState(() => new QueryClient());
-    const [trpcClient] = useState(() =>
-        trpc.createClient({
+    const [trpcRectQueryClient] = useState(() =>
+        TrpcReactQueryContext.createClient({
             links: [
                 httpLink({
-                    url: `${clientConfig.SERVER_URL}/trpc`,
+                    url: clientConfig.TRPC_URL,
                 }),
             ],
         }),
     );
 
     return (
-        <trpc.Provider
-            client={trpcClient}
+        <TrpcReactQueryContext.Provider
+            client={trpcRectQueryClient}
             queryClient={queryClient}>
 
             <QueryClientProvider
@@ -31,6 +34,6 @@ export const InitTrpcWrapper = ({ children }: PropsWithChildren) => {
                 {children}
 
             </QueryClientProvider>
-        </trpc.Provider>
+        </TrpcReactQueryContext.Provider>
     );
 }
