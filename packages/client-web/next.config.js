@@ -7,6 +7,7 @@ const nextConfig = {
       "image.tmdb.org"
     ],
   },
+  output: 'standalone'
 }
 
 module.exports = nextConfig
