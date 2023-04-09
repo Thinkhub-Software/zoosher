@@ -7,7 +7,10 @@ const nextConfig = {
       "image.tmdb.org"
     ],
   },
-  output: 'standalone'
+  output: 'standalone',
+  pageExtensions: [
+    'page.tsx'
+  ]
 }
 
 module.exports = nextConfig

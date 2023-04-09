@@ -1,5 +1,5 @@
 import { CircularProgress, InputAdornment, List, Paper, Stack, TextField } from '@mui/material';
-import { InferGetStaticPropsType } from 'next';
+import { InferGetServerSidePropsType, InferGetStaticPropsType } from 'next';
 import { useMemo, useState } from 'react';
 import { MainColumn } from '../../components/MainColumn';
 import { MovieListItem } from '../../components/MovieListItem';
@@ -8,7 +8,7 @@ import { styleConstraints } from '../../misc/styleConstraints';
 import { TrpcReactQueryContext } from '../../system/InitTrpcWrapper';
 import { trpcStaticClient } from '../../system/trpcStatic';
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 
   const movies = await trpcStaticClient
     .movieRouter
@@ -22,7 +22,7 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({ defaultMovies }: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function Home({ defaultMovies }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   const [searchTitle, setSearchTitle] = useState('');
 
