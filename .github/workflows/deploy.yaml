@@ -45,7 +45,7 @@ jobs:
         run: |
           docker build . `
             --file "./packages/server-api/server-api.Dockerfile" `
-            --tag $SERVER_API_IMAGE_NAME
+            --tag ${{env.SERVER_API_IMAGE_NAME}}
 
       # ------ build client-web
       # - name: Build client-web
@@ -58,7 +58,7 @@ jobs:
       # ------ push images
       - name: Push server-api
         run: |
-          docker push $SERVER_API_IMAGE_NAME
+          docker push ${{env.SERVER_API_IMAGE_NAME}}
 
   # deploy:
   #   name: Deploy
