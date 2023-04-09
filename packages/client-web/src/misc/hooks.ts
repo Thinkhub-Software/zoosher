@@ -6,3 +6,11 @@ export const useIsMobile = () => {
 
     return { isMobile: !isLargerThan600 };
 }
+
+export const useTextLoadingEffect = (isLoaded: boolean, height: string | number) => {
+
+    return {
+        height: isLoaded ? undefined : height,
+        // background: isLoaded ? undefined : '#ededed'
+    }
+}

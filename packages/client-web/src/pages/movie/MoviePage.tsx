@@ -1,20 +1,32 @@
 import { Box, Chip, Paper, Rating, Stack, Typography } from "@mui/material";
+import { GetServerSidePropsContext, InferGetStaticPropsType } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
 import { MainColumn } from "../../components/MainColumn";
+import { useTextLoadingEffect } from "../../misc/hooks";
 import { styleConstraints } from "../../misc/styleConstraints";
-import { TrpcReactQueryContext } from "../../system/InitTrpcWrapper";
+import { trpcStaticClient } from "../../system/trpcStatic";
 
-const useTextLoadingEffect = (isLoaded: boolean, height: string | number) => {
+export async function getServerSideProps(context: GetServerSidePropsContext<{ movie_id: string }>) {
+
+    const { movie_id } = context.params ?? {};
+
+    if (!movie_id)
+        throw new Error(`Incorrect url param: ${movie_id} typeof ${typeof movie_id}!`);
+
+    const data = await trpcStaticClient
+        .movieRouter
+        .getMovieDetails
+        .query({ movieId: movie_id });
 
     return {
-        height: isLoaded ? undefined : height,
-        // background: isLoaded ? undefined : '#ededed'
+        props: {
+            movieDetails: data
+        }
     }
 }
 
-export default function MoviePage() {
+export default function MoviePage({ movieDetails }: InferGetStaticPropsType<typeof getServerSideProps>) {
 
     const router = useRouter();
     const { movie_id } = router.query;
@@ -22,30 +34,35 @@ export default function MoviePage() {
     if ((typeof movie_id !== 'string') && !!movie_id)
         throw new Error(`Incorrect url param: ${movie_id} typeof ${typeof movie_id}!`);
 
-    const { data } = TrpcReactQueryContext
-        .movieRouter
-        .getMovieDetails
-        .useQuery({ movieId: movie_id! }, { enabled: !!movie_id });
+    const isLoaded = true;
 
-    const {
-        description,
-        imdbUrl,
-        movieTitle,
-        wikiUrl,
-        genres,
-        shortDescription,
-        posterUrl,
-        rating
-    } = useMemo(() => ({
-        description: data?.description ?? '',
-        shortDescription: data?.shortDescription ?? '',
-        genres: data?.genres ?? [],
-        imdbUrl: data?.imdbUrl ?? '',
-        movieTitle: data?.movieTitle ?? '',
-        wikiUrl: data?.wikiUrl ?? '',
-        posterUrl: data?.posterUrl ?? '',
-        rating: data?.rating ?? 0
-    } satisfies (typeof data)), [data]);
+    const { description, genres, imdbUrl, movieTitle, posterUrl, rating, shortDescription, wikiUrl } = movieDetails;
+
+    // CLIENT SIDE DATA FETCHING
+    // const { data } = TrpcReactQueryContext
+    //     .movieRouter
+    //     .getMovieDetails
+    //     .useQuery({ movieId: movie_id! }, { enabled: !!movie_id });
+
+    // const {
+    //     description,
+    //     imdbUrl,
+    //     movieTitle,
+    //     wikiUrl,
+    //     genres,
+    //     shortDescription,
+    //     posterUrl,
+    //     rating
+    // } = useMemo(() => ({
+    //     description: data?.description ?? '',
+    //     shortDescription: data?.shortDescription ?? '',
+    //     genres: data?.genres ?? [],
+    //     imdbUrl: data?.imdbUrl ?? '',
+    //     movieTitle: data?.movieTitle ?? '',
+    //     wikiUrl: data?.wikiUrl ?? '',
+    //     posterUrl: data?.posterUrl ?? '',
+    //     rating: data?.rating ?? 0
+    // } satisfies (typeof data)), [data]);
 
     return (
         <>
@@ -131,14 +148,14 @@ export default function MoviePage() {
                                     <Typography
                                         variant="h5"
                                         color="white"
-                                        sx={useTextLoadingEffect(!!data, '40px')}>
+                                        sx={useTextLoadingEffect(isLoaded, '40px')}>
                                         {movieTitle}
                                     </Typography>
 
                                     <Box
                                         sx={{
                                             marginTop: styleConstraints.spacing.normal,
-                                            ...useTextLoadingEffect(!!data, '40px')
+                                            ...useTextLoadingEffect(isLoaded, '40px')
                                         }}>
                                         {genres
                                             .map((genreName, index) => (
@@ -157,7 +174,7 @@ export default function MoviePage() {
                                     <Typography
                                         marginTop={styleConstraints.spacing.small}
                                         color="white"
-                                        sx={useTextLoadingEffect(!!data, '60px')}>
+                                        sx={useTextLoadingEffect(isLoaded, '60px')}>
                                         {shortDescription}
                                     </Typography>
 
@@ -190,7 +207,7 @@ export default function MoviePage() {
                     </Typography>
 
                     <Typography
-                        sx={useTextLoadingEffect(!!data, '200px')}>
+                        sx={useTextLoadingEffect(isLoaded, '200px')}>
                         {description}
                     </Typography>
 
