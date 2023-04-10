@@ -76,7 +76,7 @@ jobs:
           port: 22
           script: |
             echo "Activating service account and project..."
-            gcloud gcloud auth activate-service-account --key-file /etc/admin-data/keys/zoosher.json --project zoosher
+            gcloud auth activate-service-account --key-file /etc/admin-data/keys/zoosher.json --project zoosher
 
             echo "Configure Docker auth..."
             gcloud auth configure-docker
