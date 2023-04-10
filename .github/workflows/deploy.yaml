@@ -75,14 +75,11 @@ jobs:
           password: ${{env.VPS_USER_PASSWORD}}
           port: 22
           script: |
-            echo "Exporting PATH..."
-            export PATH=$PATH:~/google-cloud-sdk/bin
-
             echo "Activating service account and project..."
-            bash ~/google-cloud-sdk/bin/gcloud gcloud auth activate-service-account --key-file /etc/admin-data/keys/zoosher.json --project zoosher
+            gcloud gcloud auth activate-service-account --key-file /etc/admin-data/keys/zoosher.json --project zoosher
 
             echo "Configure Docker auth..."
-            bash ~/google-cloud-sdk/bin/gcloud auth configure-docker
+            gcloud auth configure-docker
 
             echo "Stop old container..."
             docker stop zoosher-container-server-api
