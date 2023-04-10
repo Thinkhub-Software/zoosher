@@ -18,6 +18,7 @@ RUN yarn build
 # build client-web
 WORKDIR /app/packages/client-web
 RUN yarn build
+RUN node ./postbuild.js ./.next/standalone/packages/client-web/server.js
 
 #
 # RUNNER 
@@ -29,9 +30,6 @@ COPY --from=builder /app/packages/client-web/.next/standalone ./
 COPY --from=builder /app/packages/client-web/.next/static ./packages/client-web/.next/static
 COPY --from=builder /app/packages/client-web/public ./packages/client-web/public
 
-# install cross-env
-RUN yarn global add cross-env
-
 # run
 EXPOSE 3002:3002
-CMD yarn --cwd /app/packages/client-web prodrun
+CMD node ./packages/client-web/server.js

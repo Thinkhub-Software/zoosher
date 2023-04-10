@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "mon": "next dev -p 3002",
+    "mon": "next dev",
+    "start": "next start",
     "build": "next build",
-    "prodrun": "npx cross-env PORT=3002 node ./dist/packages/client-web/server.js"
+    "prodrun": "node ./dist/packages/client-web/server.js"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
