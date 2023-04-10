@@ -84,11 +84,22 @@ jobs:
             echo "Configure Docker auth..."
             bash ~/google-cloud-sdk/bin/gcloud auth configure-docker
 
-            echo "Create container..."
-            docker create -p 5000:5000 --name zoosher-server-api gcr.io/zoosher/server-api-main-image
+            echo "Stop old container..."
+            docker stop zoosher-container-server-api
+            docker stop zoosher-container-web-client
 
-            echo "Start container..."
-            docker start zoosher-server-api
+            echo "Remove old container..."
+            docker rm zoosher-container-server-api
+            docker rm zoosher-container-web-client
 
-            echo "Update images..."
-            pwsh $VPS_UPDATE_IMAGES_SCRIPT
+            echo "Pull new image..."
+            docker pull gcr.io/zoosher/server-api-main-image
+            docker pull gcr.io/zoosher/client-web-main-image
+
+            echo "Create new container..."
+            docker create -p 5002:5002 --name zoosher-container-server-api gcr.io/zoosher/server-api-main-image
+            docker create -p 3002:3002 --name zoosher-container-web-client gcr.io/zoosher/client-web-main-image
+
+            echo "Start new container..."
+            docker start zoosher-container-server-api
+            docker start zoosher-container-web-client

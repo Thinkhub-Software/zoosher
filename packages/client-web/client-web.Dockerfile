@@ -29,5 +29,6 @@ COPY --from=builder /app/packages/client-web/.next/static ./packages/client-web/
 COPY --from=builder /app/packages/client-web/public ./packages/client-web/public
 
 # run
-EXPOSE 3000:3000
+WORKDIR /app
+EXPOSE 3002:3002
 CMD node ./packages/client-web/server.js
