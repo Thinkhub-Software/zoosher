@@ -14,7 +14,7 @@ export class ConfigService {
         this.odbmUrlTemplate = `https://www.omdbapi.com/?{params}&apikey=ee6dcd4d`;
         this.imdbMovieUrlTemplate = 'https://www.imdb.com/title/{id}/';
         this.wikiMovieUrlTemplate = 'https://en.wikipedia.org/wiki/{movie_title}';
-        this.trpcPort = 5000;
+        this.trpcPort = 5002;
         this.clientWebUrl = "http://localhost:3000";
         this.wikiExplaintextQueryUrl = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={wiki_page_title}";
     }

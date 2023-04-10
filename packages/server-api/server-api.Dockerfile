@@ -17,7 +17,7 @@ RUN yarn build
 
 # run
 WORKDIR /app
-EXPOSE 5000:5000
+EXPOSE 5002:5002
 CMD yarn prodrun:server-api
 
 #
