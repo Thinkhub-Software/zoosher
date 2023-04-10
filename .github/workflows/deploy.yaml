@@ -94,8 +94,8 @@ jobs:
             docker pull ${{env.CLIENT_WEB_IMAGE_NAME}}
 
             echo "Create new container..."
-            docker create -p 5002:5002 --name zoosher-container-server-api ${{env.SERVER_API_IMAGE_NAME}}
-            docker create -p 3002:3002 --name zoosher-container-client-web ${{env.CLIENT_WEB_IMAGE_NAME}}
+            docker create -p 5002:5002 --name zoosher-container-server-api --restart=always ${{env.SERVER_API_IMAGE_NAME}}
+            docker create -p 3002:3002 --name zoosher-container-client-web --restart=always ${{env.CLIENT_WEB_IMAGE_NAME}}
 
             echo "Start new container..."
             docker start zoosher-container-server-api
