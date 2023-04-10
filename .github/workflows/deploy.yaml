@@ -18,61 +18,61 @@ env:
   VPS_UPDATE_IMAGES_SCRIPT: /etc/admin-data/update-revision.ps1
 
 jobs:
-  build_and_push_images:
-    name: Build and push images
-    runs-on: ubuntu-latest
+  # build_and_push_images:
+  #   name: Build and push images
+  #   runs-on: ubuntu-latest
 
-    steps:
-      # ----- checkout
-      - name: Checkout
-        uses: actions/checkout@v3
+  #   steps:
+  #     # ----- checkout
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      # ------ setup google cloud platform
-      - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{env.GCP_PROJECT_ID}}
-          service_account_email: ${{env.GCP_SERVICE_ACCOUNT_EMAIL}}
-          service_account_key: ${{env.GCP_SERVICE_ACCOUNT_KEY}}
+  #     # ------ setup google cloud platform
+  #     - name: Login to GCP
+  #       uses: google-github-actions/setup-gcloud@v0
+  #       with:
+  #         project_id: ${{env.GCP_PROJECT_ID}}
+  #         service_account_email: ${{env.GCP_SERVICE_ACCOUNT_EMAIL}}
+  #         service_account_key: ${{env.GCP_SERVICE_ACCOUNT_KEY}}
 
-      # ------ configure GCP docker since we're using GCR as a registry
-      - name: Configure GCP Docker
-        run: gcloud auth configure-docker --quiet
+  #     # ------ configure GCP docker since we're using GCR as a registry
+  #     - name: Configure GCP Docker
+  #       run: gcloud auth configure-docker --quiet
 
-      # ------ build server-api
-      - name: Build server-api
-        shell: pwsh
-        run: |
-          docker build . `
-            --file "./packages/server-api/server-api.Dockerfile" `
-            --tag ${{env.SERVER_API_IMAGE_NAME}}
+  #     # ------ build server-api
+  #     - name: Build server-api
+  #       shell: pwsh
+  #       run: |
+  #         docker build . `
+  #           --file "./packages/server-api/server-api.Dockerfile" `
+  #           --tag ${{env.SERVER_API_IMAGE_NAME}}
 
-      # ------ build client-web
-      - name: Build client-web
-        shell: pwsh
-        run: |
-          docker build . `
-            --file "./packages/client-web/client-web.Dockerfile" `
-            --tag ${{env.CLIENT_WEB_IMAGE_NAME}}
+  #     # ------ build client-web
+  #     - name: Build client-web
+  #       shell: pwsh
+  #       run: |
+  #         docker build . `
+  #           --file "./packages/client-web/client-web.Dockerfile" `
+  #           --tag ${{env.CLIENT_WEB_IMAGE_NAME}}
 
-      # ------ push images
-      - name: Push server-api
-        run: |
-          docker push ${{env.SERVER_API_IMAGE_NAME}}
-          docker push ${{env.CLIENT_WEB_IMAGE_NAME}}
+  #     # ------ push images
+  #     - name: Push server-api
+  #       run: |
+  #         docker push ${{env.SERVER_API_IMAGE_NAME}}
+  #         docker push ${{env.CLIENT_WEB_IMAGE_NAME}}
 
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    needs: [build_and_push_images]
+    # needs: [build_and_push_images]
 
     steps:
       - name: Deploy images to VPS
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: $VPS_IP
-          username: $VPS_USERNAME
-          password: $VPS_USER_PASSWORD
+          host: ${{env.VPS_IP}}
+          username: ${{env.VPS_USERNAME}}
+          password: ${{env.VPS_USER_PASSWORD}}
           port: 22
           script: |
             echo "Exporting PATH..."
@@ -93,12 +93,12 @@ jobs:
             docker rm zoosher-container-web-client
 
             echo "Pull new image..."
-            docker pull gcr.io/zoosher/server-api-main-image
-            docker pull gcr.io/zoosher/client-web-main-image
+            docker pull ${{env.SERVER_API_IMAGE_NAME}}
+            docker pull ${{env.CLIENT_WEB_IMAGE_NAME}}
 
             echo "Create new container..."
-            docker create -p 5002:5002 --name zoosher-container-server-api gcr.io/zoosher/server-api-main-image
-            docker create -p 3002:3002 --name zoosher-container-web-client gcr.io/zoosher/client-web-main-image
+            docker create -p 5002:5002 --name zoosher-container-server-api ${{env.SERVER_API_IMAGE_NAME}}
+            docker create -p 3002:3002 --name zoosher-container-web-client ${{env.CLIENT_WEB_IMAGE_NAME}}
 
             echo "Start new container..."
             docker start zoosher-container-server-api
