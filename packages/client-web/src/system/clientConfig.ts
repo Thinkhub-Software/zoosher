@@ -1,10 +1,13 @@
 export const clientConfig = (() => {
 
-    const SERVER_URL = "http://localhost:5002";
-    const TRPC_URL = `${SERVER_URL}/trpc`;
+    if (!process.env.NEXT_PUBLIC_SERVER_URL)
+        throw new Error('NEXT_PUBLIC_SERVER_URL is null or undefined!');
+
+    const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+    const trpcUrl = `${serverUrl}/trpc`;
 
     return {
-        SERVER_URL,
-        TRPC_URL
+        SERVER_URL: serverUrl,
+        TRPC_URL: trpcUrl
     }
 })();

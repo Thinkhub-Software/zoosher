@@ -17,6 +17,7 @@ RUN yarn build
 
 # run
 WORKDIR /app
+ENV NODE_ENV production
 EXPOSE 5002:5002
 CMD yarn prodrun:server-api
 

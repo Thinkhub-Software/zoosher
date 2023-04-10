@@ -79,7 +79,8 @@ const nextConfig = {
     'page.tsx'
   ],
   env: {
-    PORT: getEnvVar('PORT')
+    PORT: getEnvVar('PORT'),
+    NEXT_PUBLIC_SERVER_URL: getEnvVar('NEXT_PUBLIC_SERVER_URL')
   }
 }
 

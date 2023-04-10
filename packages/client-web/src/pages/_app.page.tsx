@@ -6,7 +6,7 @@ import { Header } from '../components/Header';
 
 export default function App({ Component, pageProps }: AppProps) {
 
-  console.log(process.env.NEXT_PUBLIC_MY_CUSTOM_ENV_VAR_NAME_HEHEHEHHE);
+  console.log(process.env.NEXT_PUBLIC_SERVER_URL);
 
   return (
     <InitTrpcWrapper>

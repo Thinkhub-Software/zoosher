@@ -4,19 +4,15 @@ import cors from "cors";
 import express from "express";
 import { mainRouter } from "./api/MainRouter";
 import { createTrpcContext } from "./api/trpc";
-import { instantiateSingletonServices, instantiateTransientServices } from "./instantiation";
+import { instantiateSingletonServices } from "./instantiation";
 
-console.log('Starting server...');
+console.log(`Starting server... NODE_ENV: ${process.env.NODE_ENV ?? 'local'}`);
 
 initJsExtensions();
 
 (async () => {
 
     const singletonServices = instantiateSingletonServices();
-
-    await instantiateTransientServices(singletonServices).wikipediaService.getWikipediaMovieDescriptionAsync('Fight Club');
-
-    // console.log(await instantiateTransientServices(singletonServices).movieService.getMoviesAsync('Fight Club'));
 
     const expressInstance = express();
 
