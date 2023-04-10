@@ -9,7 +9,8 @@
     "mon:server-api": "lerna run mon --scope=@zoosher/server-api",
     "mon:client-web": "lerna run mon --scope=@zoosher/client-web",
     "build:server-api": "lerna run build --scope=@zoosher/server-api",
-    "prodrun:server-api": "lerna run prodrun --scope=@zoosher/server-api"
+    "prodrun:server-api": "lerna run prodrun --scope=@zoosher/server-api",
+    "prodrun:client-web": "lerna run prodrun --scope=@zoosher/client-web"
   },
   "devDependencies": {
     "lerna": "6.0.3",

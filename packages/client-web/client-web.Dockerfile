@@ -31,4 +31,4 @@ COPY --from=builder /app/packages/client-web/public ./packages/client-web/public
 # run
 WORKDIR /app
 EXPOSE 3002:3002
-CMD node ./packages/client-web/server.js
+CMD yarn prodrun:client-web
