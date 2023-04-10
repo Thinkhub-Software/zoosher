@@ -5,7 +5,7 @@
   "scripts": {
     "mon": "next dev -p 3002",
     "build": "next build",
-    "prodrun": "cross-env PORT=3002 node ./dist/packages/client-web/server.js"
+    "prodrun": "npx cross-env PORT=3002 node ./dist/packages/client-web/server.js"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -19,8 +19,6 @@
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
     "@zoosher/server-api": "1.0.0",
-    "cross-env": "^7.0.3",
-    "lerna": "^6.6.1",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
