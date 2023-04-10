@@ -23,12 +23,12 @@ RUN yarn build
 # RUNNER 
 #
 FROM node:18.12.1-slim as runner
+WORKDIR /app
 
 COPY --from=builder /app/packages/client-web/.next/standalone ./
 COPY --from=builder /app/packages/client-web/.next/static ./packages/client-web/.next/static
 COPY --from=builder /app/packages/client-web/public ./packages/client-web/public
 
 # run
-WORKDIR /app/packages/client-web
 EXPOSE 3002:3002
-CMD yarn prodrun
+CMD yarn prodrun:client-web
