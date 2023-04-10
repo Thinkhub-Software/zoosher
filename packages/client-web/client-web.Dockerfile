@@ -29,6 +29,6 @@ COPY --from=builder /app/packages/client-web/.next/static ./packages/client-web/
 COPY --from=builder /app/packages/client-web/public ./packages/client-web/public
 
 # run
-WORKDIR /app
+WORKDIR /app/packages/client-web
 EXPOSE 3002:3002
-CMD yarn prodrun:client-web
+CMD yarn prodrun
