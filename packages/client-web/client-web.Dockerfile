@@ -31,4 +31,4 @@ COPY --from=builder /app/packages/client-web/public ./packages/client-web/public
 
 # run
 EXPOSE 3002:3002
-CMD yarn prodrun:client-web
+CMD yarn --cwd /app/packages/client-web prodrun
