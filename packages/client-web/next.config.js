@@ -79,8 +79,7 @@ const nextConfig = {
     'page.tsx'
   ],
   env: {
-    NEXT_PUBLIC_MY_CUSTOM_ENV_VAR_NAME_HEHEHEHHE: 'asd',
-    PORT: 3002
+    PORT: getEnvVar('PORT')
   }
 }
 
