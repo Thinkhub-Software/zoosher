@@ -10,7 +10,8 @@
         "build": "tsc",
         "mon": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
         "codegen": "graphql-codegen-esm --config codegen.ts",
-        "prodrun": "node --experimental-specifier-resolution=node dist/server.js"
+        "prodrun": "node --experimental-specifier-resolution=node dist/server.js",
+        "test": "node --experimental-vm-modules ./../../node_modules/jest/bin/jest.js --config=jest.config.js ./tests"
     },
     "dependencies": {
         "@apollo/client": "^3.7.11",
@@ -30,8 +31,11 @@
     "devDependencies": {
         "@types/cors": "2.8.13",
         "@types/express": "4.17.14",
+        "@types/jest": "^29.5.0",
         "@types/node": "^18.11.18",
+        "jest": "^29.5.0",
         "nodemon": "2.0.20",
+        "ts-jest": "^29.1.0",
         "ts-node": "10.9.1"
     }
 }

@@ -21,7 +21,5 @@ export class ConfigService {
         this.wikiExplaintextQueryUrl = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={wiki_page_title}";
         this.trpcPort = 5002;
         this.clientWebUrl = getEnvVar('CLIENT_WEB_HOSTNAME');
-
-        console.log(this.clientWebUrl);
     }
 }
