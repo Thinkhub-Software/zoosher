@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { trpcProcedure, trpcRouter } from "./trpc";
+import { MovieService } from "../services/MovieService";
 
 export const movieRouter = trpcRouter({
     getMovies: trpcProcedure
@@ -11,7 +12,7 @@ export const movieRouter = trpcRouter({
 
             return await ctx
                 .services
-                .movieService
+                .getInstance(MovieService)
                 .getMoviesAsync(input.title);
         }),
 
@@ -24,7 +25,7 @@ export const movieRouter = trpcRouter({
 
             return await ctx
                 .services
-                .movieService
+                .getInstance(MovieService)
                 .getMovieDetailsAsync(input.movieId);
         })
 });

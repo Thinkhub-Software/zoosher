@@ -19,6 +19,7 @@
         "@graphql-codegen/typescript": "^3.0.3",
         "@graphql-codegen/typescript-operations": "^3.0.3",
         "@thinkhub/x-core": "^1.0.11",
+        "@thinkhub/x-injector": "^1.0.10",
         "@trpc/server": "^10.19.1",
         "axios": "^1.3.5",
         "cors": "^2.8.5",
